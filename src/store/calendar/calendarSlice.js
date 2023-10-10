@@ -4,17 +4,6 @@ import { addHours } from 'date-fns'
 const tempEvent = [
     {
         _id: new Date().getTime(),
-        title: 'Cumpleaños del jefe',
-        notes: 'Comprar el pastel',
-        start: new Date(),
-        end: addHours(new Date(), 2),
-        bgColor: '#fafafa',
-        user: {
-            _id: '123ABC',
-            name: 'Gabriel'
-        }
-    },
-    {
         title: 'Reunion',
         notes: 'Conectar con Teams',
         start: addHours(new Date(), 2),
@@ -25,7 +14,6 @@ const tempEvent = [
             name: 'Gabriel'
         }
     },
-    
 ]
 
 export const calendarSlice = createSlice({
@@ -41,7 +29,25 @@ export const calendarSlice = createSlice({
     onSetActiveEvent: (state, {payload}) => {
       state.activeEvent= payload
     },
+    onAddNewEvent: (state, {payload}) => {
+      state.events.push(payload)
+      state.activeEvent= null
+    },
+    onUpdateEvent: (state, {payload}) => {
+      state.events= state.events.map(event => {
+        if(event._id === payload._id){
+          return payload
+        }
+        return event
+      })
+    },
+    onDeleteEvent: (state) => {
+      if(state.activeEvent){
+        state.events= state.events.filter(event => event._id !== state.activeEvent._id)
+        state.activeEvent= null
+      }
+    },
   },
 })
 
-export const { onSetActiveEvent } = calendarSlice.actions
+export const { onSetActiveEvent, onAddNewEvent, onUpdateEvent, onDeleteEvent } = calendarSlice.actions

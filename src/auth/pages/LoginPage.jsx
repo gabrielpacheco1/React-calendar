@@ -1,6 +1,23 @@
+import { useForm } from '../../hooks';
 import './LoginPage.css';
 
+const loginFormFields = {
+    loginEmail: '',
+    loginPassword: ''
+}
+
+const registerFormFields = {
+    registerName: '',
+    registerEmail: '',
+    registerPassword1: '',
+    registerPassword2: '',
+}
+
 export const LoginPage = () => {
+
+    const {loginEmail, loginPassword, onInputChange: onLoginInputChange} = useForm(loginFormFields)
+    // const {loginEmail, loginPassword, onInputChange} = useForm(loginFormFields)
+
     return (
         <div className="container login-container">
             <div className="row">
@@ -12,6 +29,9 @@ export const LoginPage = () => {
                                 type="text"
                                 className="form-control"
                                 placeholder="Correo"
+                                name="loginEmail"
+                                value= {loginEmail}
+                                onChange={onLoginInputChange}
                             />
                         </div>
                         <div className="form-group mb-2">
@@ -19,6 +39,9 @@ export const LoginPage = () => {
                                 type="password"
                                 className="form-control"
                                 placeholder="Contraseña"
+                                name="loginPassword"
+                                value= {loginPassword}
+                                onChange={onLoginInputChange}
                             />
                         </div>
                         {/* <div className="form-group mb-2"> */}

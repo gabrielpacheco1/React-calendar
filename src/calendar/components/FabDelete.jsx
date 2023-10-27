@@ -4,6 +4,7 @@ export const FabDelete = () => {
 
   const {hasEventSelected, startDeletingEvent} = useCalendarStore()
   const {isDateModalOpen}= useUiStore()
+  
 
   const handleClickDelete = () => {
     startDeletingEvent()

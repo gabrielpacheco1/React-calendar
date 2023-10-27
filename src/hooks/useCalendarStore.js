@@ -2,6 +2,7 @@ import { useDispatch, useSelector } from "react-redux"
 import { onAddNewEvent, onDeleteEvent, onLoadEvents, onSetActiveEvent, onUpdateEvent } from "../store"
 import calendarApi from "../api/calendarApi"
 import { convertEventsToDateEvents } from "../helpers"
+import Swal from "sweetalert2"
 
 export const useCalendarStore = () => {
 
@@ -15,22 +16,36 @@ export const useCalendarStore = () => {
     }
 
     const startSavingEvent = async(calendarEvent) => {
-        //TODO: actualizar
-        //todo bien
-        if(calendarEvent._id){
-            //actualizando
-            dispatch(onUpdateEvent({...calendarEvent}))
-        }else {
+
+        try {
+            if(calendarEvent.id){
+                //actualizando
+                await calendarApi.put(`/events/${calendarEvent.id}`, calendarEvent)
+                dispatch(onUpdateEvent({...calendarEvent, user}))
+                return
+            }
             //creando
             const {data} = await calendarApi.post('/events', calendarEvent)
-            console.log({data})
             dispatch(onAddNewEvent({...calendarEvent, id: data.evento.id, user}))
+            
+        } catch (error) {
+            console.log({error})
+            Swal.fire('Error al actualizar', error.response.data.msg, 'error')
         }
+
     }
 
-    const startDeletingEvent = () => {
-        //Ir al backend
-        dispatch(onDeleteEvent())
+    const startDeletingEvent = async() => {
+        
+        try {
+            await calendarApi.delete(`/events/${activeEvent.id}`)
+            dispatch(onDeleteEvent())
+            Swal.fire('Evento eliminado', 'Evento eliminado existosamente', 'info')
+            
+        } catch (error) {
+            console.log({error})
+            Swal.fire('Error al eliminar', error.response.data.msg, 'error')
+        }
     }
 
     const startLoadingEvents = async() => {

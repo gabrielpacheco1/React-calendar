@@ -60,7 +60,6 @@ export const useAuthStore = () => {
             const {data} = await calendarApi.get('auth/renew')
             localStorage.setItem('token', data.token)
             localStorage.setItem('token-init-date', new Date().getTime())
-            
             dispatch(onLogin(payload))
         } catch (error) {
             localStorage.clear()
@@ -70,7 +69,7 @@ export const useAuthStore = () => {
     }
 
     const startLogout = () => {
-        localStorage.clear()
+        localStorage.clear();
         dispatch(onLogout())
     } 
   
